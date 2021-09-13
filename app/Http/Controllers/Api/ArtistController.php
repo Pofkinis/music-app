@@ -9,38 +9,33 @@ use Illuminate\Http\JsonResponse;
 
 class ArtistController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
-        return Artist::paginate(10);
+        return response()->json(Artist::paginate(10));
     }
 
-    public function store(ArtistRequest $request)
+    public function store(ArtistRequest $request): JsonResponse
     {
-        return Artist::create($request->all());
+        return response()->json(Artist::create($request->all()));
     }
 
     public function show($id): JsonResponse
     {
         try {
-            return Artist::findorfail($id);
+            return response()->json(Artist::findorfail($id));
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Artist not found'
             ], 404);
         }
-
     }
 
     public function update(ArtistRequest $request, $id): JsonResponse
     {
         try {
-            $artist = Artist::findorfail($id)->update([
-                'first_name' => $request->get('first_name'),
-                'last_name' => $request->get('last_name'),
-                'birth_date' => $request->get('birth_date'),
-            ]);
-
-            return $artist;
+            $artist = Artist::findorfail($id);
+            $artist->update($request->all());
+            return response()->json($artist);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Artist not found'
@@ -48,13 +43,11 @@ class ArtistController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         try {
             Artist::findorfail($id)->delete();
-            return response()->json([
-                'success' => 'Artist deleted'
-            ], 404);
+            return response()->json('Artist has been deleted', 204);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Artist not found'
