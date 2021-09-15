@@ -19,39 +19,20 @@ class SongController extends Controller
         return response()->json(Song::create($request->all()));
     }
 
-    public function show($id): JsonResponse
+    public function show(Song $song): JsonResponse
     {
-        try {
-            return response()->json(Song::findorfail($id));
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Song not found'
-            ], 404);
-        }
+        return response()->json($song);
     }
 
-    public function update(SongRequest $request, $id): JsonResponse
+    public function update(SongRequest $request, Song $song): JsonResponse
     {
-        try {
-            $artist = Song::findorfail($id);
-            $artist->update($request->all());
-            return response()->json($artist);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Song not found'
-            ], 404);
-        }
+        $song->update($request->all());
+        return response()->json($song);
     }
 
-    public function destroy($id): JsonResponse
+    public function destroy(Song $song): JsonResponse
     {
-        try {
-            Song::findorfail($id)->delete();
-            return response()->json('Song has been deleted', 204);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Song not found'
-            ], 404);
-        }
+        $song->delete();
+        return response()->json('Song has been deleted', 204);
     }
 }

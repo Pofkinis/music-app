@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AlbumRequest;
 use App\Models\Album;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class AlbumController extends Controller
 {
@@ -20,39 +19,20 @@ class AlbumController extends Controller
         return response()->json(Album::create($request->all()));
     }
 
-    public function show($id): JsonResponse
+    public function show(Album $album): JsonResponse
     {
-        try {
-            return response()->json(Album::findorfail($id));
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Album not found'
-            ], 404);
-        }
+        return response()->json($album);
     }
 
-    public function update(AlbumRequest $request, $id): JsonResponse
+    public function update(AlbumRequest $request, Album $album): JsonResponse
     {
-        try {
-            $artist = Album::findorfail($id);
-            $artist->update($request->all());
-            return response()->json($artist);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Album not found'
-            ], 404);
-        }
+        $album->update($request->all());
+        return response()->json($album);
     }
 
-    public function destroy($id): JsonResponse
+    public function destroy(Album $album): JsonResponse
     {
-        try {
-            Album::findorfail($id)->delete();
-            return response()->json('Album has been deleted', 204);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Album not found'
-            ], 404);
-        }
+        $album->delete();
+        return response()->json('Album has been deleted', 204);
     }
 }

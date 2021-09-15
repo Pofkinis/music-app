@@ -19,39 +19,20 @@ class ArtistController extends Controller
         return response()->json(Artist::create($request->all()));
     }
 
-    public function show($id): JsonResponse
+    public function show(Artist $artist): JsonResponse
     {
-        try {
-            return response()->json(Artist::findorfail($id));
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Artist not found'
-            ], 404);
-        }
+        return response()->json($artist);
     }
 
-    public function update(ArtistRequest $request, $id): JsonResponse
+    public function update(ArtistRequest $request, Artist $artist): JsonResponse
     {
-        try {
-            $artist = Artist::findorfail($id);
-            $artist->update($request->all());
-            return response()->json($artist);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Artist not found'
-            ], 404);
-        }
+        $artist->update($request->all());
+        return response()->json($artist);
     }
 
-    public function destroy($id): JsonResponse
+    public function destroy(Artist $artist): JsonResponse
     {
-        try {
-            Artist::findorfail($id)->delete();
-            return response()->json('Artist has been deleted', 204);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Artist not found'
-            ], 404);
-        }
+        $artist->delete();
+        return response()->json('Artist has been deleted', 204);
     }
 }
