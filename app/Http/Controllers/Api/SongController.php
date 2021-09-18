@@ -9,6 +9,11 @@ use Illuminate\Http\JsonResponse;
 
 class SongController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum', 'admin'])->only(['store', 'update', 'destroy']);
+    }
+
     public function index(): JsonResponse
     {
         return response()->json(Song::paginate(10));

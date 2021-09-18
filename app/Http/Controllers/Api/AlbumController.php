@@ -9,6 +9,11 @@ use Illuminate\Http\JsonResponse;
 
 class AlbumController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum', 'admin'])->only(['store', 'update', 'destroy']);
+    }
+
     public function index(): JsonResponse
     {
         return response()->json(Album::paginate(10));
