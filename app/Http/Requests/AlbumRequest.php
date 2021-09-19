@@ -31,6 +31,7 @@ class AlbumRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'artist_id' => ['required', 'integer', new ArtistExists()],
+            'release_date' => 'required|date_format:Y-m-d',
         ];
     }
 

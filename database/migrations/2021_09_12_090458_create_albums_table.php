@@ -17,6 +17,7 @@ class CreateAlbumsTable extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('artist_id')->constrained('artists');
+            $table->date('release_date');
             $table->softDeletes();
             $table->timestamps();
         });

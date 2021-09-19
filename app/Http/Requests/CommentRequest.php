@@ -25,6 +25,7 @@ class CommentRequest extends FormRequest
     public function rules()
     {
         return [
+            'comment' => 'required',
             'song_id' => ['required', 'integer', new SongExists()],
         ];
     }

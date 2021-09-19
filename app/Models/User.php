@@ -12,6 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 /**
  * @property boolean $is_admin
  * @property integer $id
+ * @method static create(array $user)
  */
 class User extends Authenticatable
 {

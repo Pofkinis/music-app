@@ -17,7 +17,6 @@ class CreateSongsTable extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('album_id')->constrained('albums');
-            $table->date('release_date');
             $table->string('link_to_song');
             $table->string('type');
             $table->softDeletes();

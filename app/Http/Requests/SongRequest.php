@@ -31,7 +31,6 @@ class SongRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'album_id' => ['required', 'integer', new AlbumExists()],
-            'release_date' => 'required|date_format:Y-m-d',
             'link_to_song' => 'required|max:255',
             'type' => 'required|max:255',
         ];
