@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\Api\AlbumController;
 use App\Http\Controllers\Api\ArtistController;
+use App\Http\Controllers\Api\PlaylistController;
 use App\Http\Controllers\Api\SongController;
 use App\Http\Controllers\AuthController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,4 +26,6 @@ Route::apiResource('songs', SongController::class);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('song/add-to-playlist/{song}', [PlaylistController::class, 'addSong'])->name('song.add-to-list');
+    Route::get('song/remove-from-playlist/{song}', [PlaylistController::class, 'removeSong'])->name('song.remove-from-list');
 });
