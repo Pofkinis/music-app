@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SongRequest;
+use App\Models\Artist;
 use App\Models\Song;
 use Illuminate\Http\JsonResponse;
 
@@ -14,9 +15,14 @@ class SongController extends Controller
         $this->middleware(['auth:sanctum', 'admin'])->only(['store', 'update', 'destroy']);
     }
 
+    public function getSongByArtist(Artist $artist)
+    {
+        return response()->json($artist->albums()->paginate(10));
+    }
+
     public function index(): JsonResponse
     {
-        return response()->json(Song::with('album')->paginate(10));
+        return response()->json(Song::with(['album', 'album.artist'])->paginate(10));
     }
 
     public function store(SongRequest $request): JsonResponse
@@ -26,7 +32,7 @@ class SongController extends Controller
 
     public function show(Song $song): JsonResponse
     {
-        return response()->json($song);
+        return response()->json($song->load(['album', 'album.artist']));
     }
 
     public function update(SongRequest $request, Song $song): JsonResponse

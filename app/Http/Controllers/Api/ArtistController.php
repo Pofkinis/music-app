@@ -16,7 +16,7 @@ class ArtistController extends Controller
 
     public function index(): JsonResponse
     {
-        return response()->json(Artist::paginate(10));
+        return response()->json(Artist::with(['albums', 'albums.songs'])->paginate(10));
     }
 
     public function store(ArtistRequest $request): JsonResponse
@@ -26,7 +26,7 @@ class ArtistController extends Controller
 
     public function show(Artist $artist): JsonResponse
     {
-        return response()->json($artist);
+        return response()->json($artist->load(['albums', 'albums.songs']));
     }
 
     public function update(ArtistRequest $request, Artist $artist): JsonResponse
