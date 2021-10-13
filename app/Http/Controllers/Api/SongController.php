@@ -12,7 +12,7 @@ class SongController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum', 'admin'])->only(['store', 'update', 'destroy']);
+        $this->middleware(['auth:api', 'admin'])->only(['store', 'update', 'destroy']);
     }
 
     public function getSongByArtist(Artist $artist)
