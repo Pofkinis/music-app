@@ -18,7 +18,7 @@ class CommentController extends Controller
 
     public function store(CommentRequest $request): JsonResponse
     {
-        return response()->json(auth()->user()->comments()->create($request->all()));
+        return response()->json(auth()->user()->comments()->create($request->all()), 201);
     }
 
     public function destroy(Comment $comment): JsonResponse

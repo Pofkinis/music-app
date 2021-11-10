@@ -21,7 +21,7 @@ class AlbumController extends Controller
 
     public function store(AlbumRequest $request): JsonResponse
     {
-        return response()->json(Album::create($request->all()));
+        return response()->json(Album::create($request->all()), 201);
     }
 
     public function show(Album $album): JsonResponse

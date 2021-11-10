@@ -66,7 +66,7 @@ class SongsSeeder extends Seeder
         ];
 
         foreach ($songs as $song) {
-            Song::create($song);
+            Song::firstOrCreate($song);
         }
     }
 }
