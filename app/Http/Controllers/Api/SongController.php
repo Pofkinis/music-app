@@ -15,7 +15,7 @@ class SongController extends Controller
         $this->middleware(['auth:api', 'admin'])->only(['store', 'update', 'destroy']);
     }
 
-    public function getSongByArtist(Artist $artist)
+    public function getSongByArtist(Artist $artist): JsonResponse
     {
         return response()->json($artist->albums()->paginate(10));
     }
