@@ -19,24 +19,22 @@ class UsersSeeder extends Seeder
                 'name' => 'Admin',
                 'email' => 'admin@admin.com',
                 'is_admin' => true,
-                'password' => bcrypt('secret')
             ],
             1 => [
                 'name' => 'User1',
                 'email' => 'user1@gmail.com',
                 'is_admin' => false,
-                'password' => bcrypt('secret')
             ],
             2 => [
                 'name' => 'User2',
                 'email' => 'user2@gmail.com',
                 'is_admin' => false,
-                'password' => bcrypt('secret')
             ]
         ];
 
         foreach ($users as $user){
-            User::create($user);
+            User::firstOrCreate($user,[                'password' => bcrypt('secret')
+            ]);
         }
     }
 }

@@ -33,7 +33,7 @@ class AlbumsSeeder extends Seeder
         ];
 
         foreach ($albums as $album){
-            Album::create($album);
+            Album::firstOrCreate($album);
         }
     }
 }

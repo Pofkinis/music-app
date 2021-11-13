@@ -21,7 +21,7 @@ class ArtistController extends Controller
 
     public function store(ArtistRequest $request): JsonResponse
     {
-        return response()->json(Artist::create($request->all()));
+        return response()->json(Artist::create($request->all()), 201);
     }
 
     public function show(Artist $artist): JsonResponse

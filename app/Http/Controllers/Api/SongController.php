@@ -27,7 +27,7 @@ class SongController extends Controller
 
     public function store(SongRequest $request): JsonResponse
     {
-        return response()->json(Song::create($request->all()));
+        return response()->json(Song::create($request->all()), 201);
     }
 
     public function show(Song $song): JsonResponse

@@ -28,7 +28,7 @@ class ArtistsSeeder extends Seeder
         ];
 
         foreach ($artists as $artist){
-            Artist::create($artist);
+            Artist::firstOrCreate($artist);
         }
     }
 }
