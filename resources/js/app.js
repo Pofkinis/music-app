@@ -1,11 +1,22 @@
-require('./bootstrap');
+require('./bootstrap.js');
 
-import Vue from 'vue';
-import Hello from './components/hello.vue';
-const vue = new Vue({
+import Vue from 'vue'
+
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+
+import routes from './routes'
+
+import App from './components/App.vue'
+import Navbar from './components/Ui/Navbar.vue'
+
+Vue.component('pagination', require('laravel-vue-pagination'))
+
+const app = new Vue({
     el: '#app',
-
-    components:{
-        'hello': Hello,
-    }
+    components: {
+        App,
+        Navbar,
+    },
+    router: new VueRouter(routes)
 });
