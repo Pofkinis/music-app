@@ -74,9 +74,10 @@ export default {
                 email: this.email,
                 password: this.password,
             }).then(response => {
+                console.log("logg");
                 localStorage.setItem('token', response.data.access_token);
                 this.$router.push("/songs");
-                location.reload();
+                // location.reload();
             }).catch(error => {
                 if (error.response.status === 401) {
                     this.error = true;

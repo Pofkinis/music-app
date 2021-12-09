@@ -6,19 +6,21 @@
         </header>
 
         <div class="grid justify-items-center relative">
-        <form method="GET">
-            <div class="relative text-gray-600 focus-within:text-gray-400">
+
+            <div class="grid justify-items-center relative">
+                <div class="relative text-gray-600 focus-within:text-gray-400">
       <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-        <button type="submit" class="p-1 focus:outline-none focus:shadow-outline">
+        <button class="p-1 focus:outline-none focus:shadow-outline">
           <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                viewBox="0 0 24 24" class="w-6 h-6"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
         </button>
       </span>
-                <input type="search" name="q"
-                       class="py-2 text-sm text-white bg-gray-900 rounded-md pl-10 focus:outline-none focus:bg-white focus:text-gray-900"
-                       placeholder="Search..." autocomplete="off">
+                    <input type="search" name="q" v-model="search"
+                           class="py-2 text-sm text-white bg-gray-900 rounded-md pl-10 focus:outline-none focus:bg-white focus:text-gray-900"
+                           placeholder="Search..." autocomplete="off">
+                </div>
             </div>
-        </form>
+
         </div>
 
         <div class="flex border-b border-gray-800 font-bold lg:mx-52">
@@ -30,7 +32,7 @@
             <div class="p-3 w-12"></div>
             <div class="p-3 w-12"></div>
         </div>
-        <div v-for="song in this.songs" class="flex border-b border-gray-800 hover:bg-gray-800 lg:mx-52">
+        <div v-for="song in this.songs.data" class="flex border-b border-gray-800 hover:bg-gray-800 lg:mx-52">
             <div class="p-3 w-8 flex-shrink-0">❤️</div>
             <div class="p-3 w-full">{{ song.name }}</div>
             <div class="p-3 w-full">{{ song.album.artist.first_name }} {{ song.album.artist.last_name }}</div>
@@ -77,6 +79,8 @@
 </template>
 
 <script>
+import {Notyf} from "notyf";
+
 export default {
     data() {
         return {
@@ -87,15 +91,30 @@ export default {
         }
     },
     mounted() {
-        axios.get('/api/songs').then(response => {
-            this.songs = response.data.data;
-        });
+        this.getResults();
     },
     methods: {
+        getResults(page = 1) {
+            axios.get('/api/songs?page=' + page, {
+                params: {
+                    page,
+                    search: this.search.length >= 4 ? this.search : ''
+                }
+            }).then(response => {
+                this.songs = response.data;
+            });
+        },
         openSongModal(link) {
             this.linkToSong = link;
             this.showSongModal = true;
         }
-    }
+    },
+    watch: {
+        search (val, old) {
+            if (val.length >= 4 || old.length >= 4) {
+                this.getResults();
+            }
+        }
+    },
 }
 </script>

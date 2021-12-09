@@ -152,7 +152,12 @@ export default {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             }
         }).then(response => {
-            this.isAdmin = true;
+            if(response.data.is_admin){
+                this.isAdmin = true;
+            }
+            else{
+                this.$router.push('/');
+            }
         }).catch(error => {
             this.$router.push('/');
         });

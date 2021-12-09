@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\PlaylistController;
 use App\Http\Controllers\Api\SongController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,4 +34,5 @@ Route::middleware('auth:api')->group(function () {
     Route::get('song/add-to-playlist/{song}', [PlaylistController::class, 'addSong'])->name('song.add-to-list');
     Route::get('song/remove-from-playlist/{song}', [PlaylistController::class, 'removeSong'])->name('song.remove-from-list');
     Route::resource('comments', CommentController::class);
+    Route::get('user', [UserController::class, 'show'])->name('users.show');
 });
