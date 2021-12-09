@@ -15,3 +15,6 @@ mix.js('resources/js/app.js', 'public/js').vue()
     .postCss('resources/css/app.css', 'public/css', [
         require("tailwindcss"),
     ]);
+
+mix.copy('node_modules/notyf/notyf.min.js', 'public/assets/js/notyf.min.js');
+mix.copy('node_modules/notyf/notyf.min.css', 'public/assets/css/notyf.min.css');
