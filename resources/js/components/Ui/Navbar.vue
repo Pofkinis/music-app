@@ -1,13 +1,13 @@
 <template>
     <div class="font-sans antialiased" id="app">
-        <nav class="flex items-center justify-between flex-wrap bg-blue-200 p-6">
+        <nav class="flex items-center justify-between flex-wrap bg-green-500 p-6">
             <div class="flex items-center flex-no-shrink text-white mr-6">
                 <svg class="fill-current h-8 w-8 mr-2" width="54" height="54" viewBox="0 0 54 54"
                      xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z"/>
                 </svg>
-                <span class="font-semibold text-xl tracking-tight">Tailwind CSS</span>
+                <span class="font-semibold text-xl tracking-tight">Music App</span>
             </div>
             <div class="block sm:hidden">
                 <button @click="toggle"
@@ -28,18 +28,32 @@
                     <!--                    <a href="#responsive-header" class="no-underline block mt-4 sm:inline-block sm:mt-0 text-teal-lighter hover:text-white mr-4">-->
                     <!--                        Songs-->
                     <!--                    </a>-->
-                    <a href="#responsive-header"
-                       class="no-underline block mt-4 sm:inline-block sm:mt-0 text-teal-lighter hover:text-white mr-4">
-                        Examples
-                    </a>
-                    <a href="#responsive-header"
-                       class="no-underline block mt-4 sm:inline-block sm:mt-0 text-teal-lighter hover:text-white">
-                        Blog
-                    </a>
+                    <router-link active-class="text-white"
+                                 exact :to="{ name: 'admin.songs.index' }"
+                                 v-if="user && user.is_admin" href="#responsive-header"
+                                 class="no-underline block mt-4 sm:inline-block sm:mt-0 text-teal-lighter hover:text-white mr-4">
+                        Manage songs
+                    </router-link>
+                    <router-link active-class="text-white"
+                                 exact :to="{ name: 'admin.albums.index' }"
+                                 v-if="user && user.is_admin" href="#responsive-header"
+                                 class="no-underline block mt-4 sm:inline-block sm:mt-0 text-teal-lighter hover:text-white mr-4">
+                        Manage albums
+                    </router-link>
+                    <router-link active-class="text-white"
+                                 exact :to="{ name: 'admin.artists.index' }"
+                                 v-if="user && user.is_admin" href="#responsive-header"
+                                 class="no-underline block mt-4 sm:inline-block sm:mt-0 text-teal-lighter hover:text-white mr-4">
+                        Manage artists
+                    </router-link>
                 </div>
                 <div>
-                    <a href="#"
-                       class="no-underline inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal hover:bg-white mt-4 sm:mt-0">Prisijungti</a>
+                    <button v-if="user" @click="logout">Logout</button>
+                    <router-link v-else active-class="text-white"
+                                 exact :to="{ name: 'auth.login' }"
+                                 class="no-underline inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal hover:bg-green-300 mt-4 sm:mt-0">
+                        Login
+                    </router-link>
                 </div>
             </div>
         </nav>
@@ -51,12 +65,36 @@ export default {
     data() {
         return {
             open: false,
+            user: null,
         }
     },
     methods: {
         toggle() {
             this.open = !this.open
+        },
+        logout() {
+            const body = {};
+            const headers = {
+                "Authorization": "Bearer " + localStorage.getItem('token'),
+            };
+            axios.post("/api/logout", body, {headers})
+                .then(response => this.articleId = response.data.id);
+            this.$router.push("/songs");
+            location.reload();
         }
+    },
+    mounted() {
+        axios.get('/api/user', {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        }).then(response => {
+            this.user = response.data;
+            console.log(response);
+
+        }).catch(error => {
+            console.log(error);
+        });
     }
 }
 </script>
