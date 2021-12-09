@@ -16,7 +16,18 @@ class AlbumController extends Controller
 
     public function index(): JsonResponse
     {
-        return response()->json(Album::with(['artist', 'songs'])->paginate(10));
+        return response()->json(Album::with(['artist', 'songs'])
+            ->when(request('search', '') != '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('name', 'LIKE', '%' . request('search') . '%')
+                        ->orWhere('release_date', 'LIKE', '%' . request('search') . '%')
+                        ->orWhereHas('artist', function ($qry) {
+                            $qry->where('first_name', 'LIKE', '%' . request('search') . '%')
+                                ->orWhere('last_name', 'LIKE', '%' . request('search') . '%');
+                        });
+                });
+            })
+            ->paginate(10));
     }
 
     public function store(AlbumRequest $request): JsonResponse
@@ -37,6 +48,9 @@ class AlbumController extends Controller
 
     public function destroy(Album $album): JsonResponse
     {
+        if ($album->songs()->exists()) {
+            return response()->json('Cannot delete album', 409);
+        }
         $album->delete();
         return response()->json('Album has been deleted', 204);
     }

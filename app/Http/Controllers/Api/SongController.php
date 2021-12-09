@@ -22,7 +22,21 @@ class SongController extends Controller
 
     public function index(): JsonResponse
     {
-        return response()->json(Song::with(['album', 'album.artist'])->paginate(10));
+        return response()->json(Song::with(['album', 'album.artist'])
+            ->when(request('search', '') != '', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('name', 'LIKE', '%' . request('search') . '%')
+                        ->orWhere('type', 'LIKE', '%' . request('search') . '%')
+                        ->orWhereHas('album', function ($qry) {
+                            $qry->where('name', 'LIKE', '%' . request('search') . '%')
+                                ->orWhereHas('artist', function ($query) {
+                                    $query->where('first_name', 'LIKE', '%' . request('search') . '%')
+                                        ->orWhere('last_name', 'LIKE', '%' . request('search') . '%');
+                                });
+                        });
+                });
+            })
+            ->paginate(10));
     }
 
     public function store(SongRequest $request): JsonResponse

@@ -13,7 +13,7 @@ class CommentController extends Controller
 {
     public function getSongComments(Song $song): JsonResponse
     {
-        return response()->json($song->comments);
+        return response()->json($song->comments()->with('user')->orderBy('id', 'desc')->paginate(5));
     }
 
     public function store(CommentRequest $request): JsonResponse

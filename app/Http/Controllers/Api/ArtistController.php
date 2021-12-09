@@ -16,7 +16,14 @@ class ArtistController extends Controller
 
     public function index(): JsonResponse
     {
-        return response()->json(Artist::with(['albums', 'albums.songs'])->paginate(10));
+        return response()->json(Artist::with(['albums', 'albums.songs'])->when(request('search', '') != '', function ($query) {
+            $query->where(function ($q) {
+                $q->where('first_name', 'LIKE', '%' . request('search') . '%')
+                    ->orWhere('last_name', 'LIKE', '%' . request('search') . '%')
+                    ->orWhere('birth_date', 'LIKE', '%' . request('search') . '%');
+            });
+        })
+            ->paginate(10));
     }
 
     public function store(ArtistRequest $request): JsonResponse
@@ -37,6 +44,10 @@ class ArtistController extends Controller
 
     public function destroy(Artist $artist): JsonResponse
     {
+        if ($artist->albums()->exists()) {
+            return response()->json('Cannot delete song', 409);
+        }
+
         $artist->delete();
         return response()->json('Artist has been deleted', 204);
     }
