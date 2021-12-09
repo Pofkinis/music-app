@@ -21,6 +21,7 @@ class Album extends Model
         'name',
         'artist_id',
         'release_date',
+        'image_link',
     ];
 
     public function artist(): BelongsTo
